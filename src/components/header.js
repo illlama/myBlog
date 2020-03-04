@@ -22,7 +22,7 @@ const Header = ({ siteTitle }) => {
           <NavbarBrand href="/">{siteTitle}</NavbarBrand>
           <NavbarToggler onClick={toggle} />
           <Collapse isOpen={isOpen} navbar>
-            <Nav className="mr-auto" navbar>
+            <Nav className="ml-auto" navbar>
               <NavItem>
                 <NavLink href="/team">Team</NavLink>
               </NavItem>

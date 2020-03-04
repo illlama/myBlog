@@ -26,6 +26,7 @@ const IndexPage = () => (
                     date={node.frontmatter.date}
                     body={node.excerpt}
                     fluid={node.frontmatter.image.childImageSharp.fluid}
+                    tags={node.frontmatter.tags}
                   />
                 ))}
               </div>
@@ -44,7 +45,7 @@ const IndexPage = () => (
 
 const indexQuery = graphql`
   query {
-    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
+    allMdx(sort: { fields: [frontmatter___key], order: DESC }) {
       edges {
         node {
           frontmatter {
@@ -60,6 +61,7 @@ const indexQuery = graphql`
                 }
               }
             }
+            tags
           }
           excerpt
         }
