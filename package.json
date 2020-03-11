@@ -48,5 +48,8 @@
   },
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
+  },
+  "resolutions": {
+    "mdx-deck/**/gatsby": "2.18.4"
   }
 }

@@ -1,55 +1,52 @@
-import React from "react"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
-import { graphql, Link } from "gatsby"
-import { Badge, Row, Col, Card, CardBody, CardSubtitle } from "reactstrap"
-import { MDXRenderer } from "gatsby-plugin-mdx"
-import Img from "gatsby-image"
-import { slugify } from "../util/utilityFunctions"
-import Sidebar from "../components/Sidebar"
+import React from "react";
+import Layout from "../components/layout";
+import SEO from "../components/seo";
+import { graphql, Link } from "gatsby";
+import { Badge, Card, CardBody, CardSubtitle } from "reactstrap";
+import { MDXRenderer } from "gatsby-plugin-mdx";
+import Img from "gatsby-image";
+import { slugify } from "../util/utilityFunctions";
+import authors from "../util/authors";
 
 const SinglePost = ({ data }) => {
-  const post = data.mdx.frontmatter
-  console.log(data.mdx)
+  /// 여기서 data가 안뜨는 오류가 발생하는데 이 부분은 "resolutions": { "mdx-deck/**/gatsby": "2.18.4"} 로 해결.package
+  const post = data.mdx.frontmatter;
+  const author = authors?.find(x => x.name === post.author);
   return (
-    <Layout>
+    <Layout
+      pageTitle={post.title}
+      postAuthor={author}
+      authorImageFluid={data.file.childImageSharp.fluid}
+    >
       <SEO title={post.title} />
-      <h1>{post.title}</h1>
-      <Row>
-        <Col md="8">
-          <Card>
-            <Img
-              className="card-image-top"
-              fluid={post.image.childImageSharp.fluid}
-            />
-            <CardBody>
-              <CardSubtitle>
-                <span className="text-info">{post.date}</span> by{" "}
-                <span className="text-info">{post.author}</span>
-              </CardSubtitle>
-              <MDXRenderer>{data.mdx.body}</MDXRenderer>
-              <ul className="post-tags">
-                {post.tags.map(tag => (
-                  <li key={tag}>
-                    <Link to={`/tag/${slugify(tag)}`}>
-                      <Badge color="primary">{tag}</Badge>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </CardBody>
-          </Card>
-        </Col>
-        <Col className="md-4">
-          <Sidebar />
-        </Col>
-      </Row>
+      <Card>
+        <Img
+          className="card-image-top"
+          fluid={post.image.childImageSharp.fluid}
+        />
+        <CardBody>
+          <CardSubtitle>
+            <span className="text-info">{post.date}</span> by{" "}
+            <span className="text-info">{post.author}</span>
+          </CardSubtitle>
+          <MDXRenderer>{data.mdx.body}</MDXRenderer>
+          <ul className="post-tags">
+            {post.tags.map(tag => (
+              <li key={tag}>
+                <Link to={`/tag/${slugify(tag)}`}>
+                  <Badge color="primary">{tag}</Badge>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </CardBody>
+      </Card>
     </Layout>
-  )
-}
+  );
+};
 
 export const postQuery = graphql`
-  query blogPostByslug($slug: String!) {
+  query blogPostByslug($slug: String!, $imageUrl: String!) {
     mdx(fields: { slug: { eq: $slug } }) {
       id
       excerpt(pruneLength: 20)
@@ -68,6 +65,13 @@ export const postQuery = graphql`
         }
       }
     }
+    file(relativePath: { eq: $imageUrl }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
   }
-`
-export default SinglePost
+`;
+export default SinglePost;

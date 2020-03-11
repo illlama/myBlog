@@ -1,21 +1,22 @@
-const { slugify } = require("./src/util/utilityFunctions")
-const path = require(`path`)
+const { slugify } = require("./src/util/utilityFunctions");
+const authors = require("./src/util/authors");
+const path = require("path");
 
 exports.onCreateNode = ({ node, actions }) => {
-  const { createNodeField } = actions
+  const { createNodeField } = actions;
   if (node.internal.type === "Mdx") {
-    const slugFromTitle = slugify(node.frontmatter.title)
+    const slugFromTitle = slugify(node.frontmatter.title);
     createNodeField({
       node,
       name: "slug",
       value: slugFromTitle,
-    })
+    });
   }
-}
+};
 
 exports.createPages = ({ actions, graphql }) => {
-  const { createPage } = actions
-  const singlePostTemplate = path.resolve("src/templates/single-post.js")
+  const { createPage } = actions;
+  const singlePostTemplate = path.resolve("src/templates/single-post.js");
 
   return graphql(`
     {
@@ -33,8 +34,8 @@ exports.createPages = ({ actions, graphql }) => {
       }
     }
   `).then(res => {
-    if (res.errors) return Promise.reject(res.errors)
-    const posts = res.data.allMdx.edges
+    if (res.errors) return Promise.reject(res.errors);
+    const posts = res.data.allMdx.edges;
     posts.forEach(({ node }) => {
       createPage({
         path: node.fields.slug,
@@ -42,8 +43,11 @@ exports.createPages = ({ actions, graphql }) => {
         context: {
           //Passing slug for template to use to get post
           slug: node.fields.slug,
+          //Find author imageUrl from authors and pass it to the single post template
+          imageUrl: authors.find(x => x.name === node.frontmatter.author)
+            .imageUrl,
         },
-      })
-    })
-  })
-}
+      });
+    });
+  });
+};
