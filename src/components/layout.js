@@ -22,7 +22,7 @@ const Layout = ({ children, pageTitle, postAuthor, authorImageFluid }) => {
     <>
       <script
         src="https://kit.fontawesome.com/45fe5e32d0.js"
-        crossorigin="anonymous"
+        crossOrigin="anonymous"
       ></script>
       <Header siteTitle={data.site.siteMetadata.title} />
       <div className="container" id="content">
