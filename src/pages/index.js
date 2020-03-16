@@ -1,11 +1,9 @@
-import React from "react"
+import React from "react";
 
-import Layout from "../components/layout"
-import SEO from "../components/seo"
-import Post from "../components/Post"
-import Sidebar from "../components/Sidebar"
-import { graphql, StaticQuery } from "gatsby"
-import { Row, Col } from "reactstrap"
+import Layout from "../components/layout";
+import SEO from "../components/seo";
+import Post from "../components/Post";
+import { graphql, StaticQuery } from "gatsby";
 
 const IndexPage = () => (
   <Layout pageTitle="Code Blog">
@@ -28,11 +26,11 @@ const IndexPage = () => (
               />
             ))}
           </div>
-        )
+        );
       }}
     />
   </Layout>
-)
+);
 
 const indexQuery = graphql`
   query {
@@ -61,6 +59,6 @@ const indexQuery = graphql`
       }
     }
   }
-`
+`;
 
-export default IndexPage
+export default IndexPage;
