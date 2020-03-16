@@ -34,7 +34,7 @@ const IndexPage = () => (
 
 const indexQuery = graphql`
   query {
-    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
+    allMdx(sort: { fields: [frontmatter___date], order: DESC }, limit: 2) {
       edges {
         node {
           id
