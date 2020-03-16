@@ -19,7 +19,8 @@ exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
   const templates = {
     singlePost: path.resolve("src/templates/single-post.js"),
-    tagsPost: path.resolve("src/templates/tags-page.js"),
+    tagsPage: path.resolve("src/templates/tags-page.js"),
+    tagPosts: path.resolve("src/templates/tag-posts.js"),
   };
   return graphql(`
     {
@@ -70,11 +71,22 @@ exports.createPages = ({ actions, graphql }) => {
     tags = _.uniq(tags);
     createPage({
       path: `/tags`,
-      component: templates.tagsPost,
+      component: templates.tagsPage,
       context: {
         tags,
         tagPostCounts,
       },
+    });
+
+    ///Create tag-posts pages
+    tags.forEach(tag => {
+      createPage({
+        path: `/tag/${slugify(tag)}`,
+        component: templates.tagPosts,
+        context: {
+          tag,
+        },
+      });
     });
   });
 };
